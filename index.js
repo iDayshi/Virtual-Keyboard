@@ -1,4 +1,7 @@
-localStorage.setItem('lang', 'Eng');
+alert(
+  'Это детище ведёт себя очень странно. Но Для более адекватной работы язык на клавиатуре, и на операционной системе должны совпадать.'
+);
+
 let arrayKeyLowerEngArr = [
   '`',
   '1',
@@ -265,10 +268,21 @@ let arrayKeyUpperRu = [
   ',',
 ];
 
+let capsCheak = false;
 const button = document.querySelector('.centr');
 const blockKeyBoard = document.createElement('div');
+const infoBlock = document.createElement('h2');
+infoBlock.innerText = 'Shift + Alt для переключения языков.';
+infoBlock.style.color = 'white';
+const textarea = document.createElement('textarea');
+textarea.classList.add('text');
+textarea.rows = 5;
+textarea.cols = 40;
+textarea.style.width = '70%';
+textarea.style.height = '100px';
 blockKeyBoard.classList.add('position');
-document.body.append(blockKeyBoard);
+document.body.prepend(textarea);
+document.body.append(blockKeyBoard, infoBlock);
 
 const keyLowerEng = (keys) => {
   const arrowBlock = document.createElement('div');
@@ -317,20 +331,25 @@ const keyLowerEng = (keys) => {
       keyBlock.classList.add('key-space', 'key-other');
       keyBlock.innerText = `Space`;
     }
-    if (key === 'ArrowLeft' || key === 'ArrowRight') {
+    if (key === 'ArrowLeft') {
       keyBlock.classList.add('key-other');
-      keyBlock.innerText = `Bok`;
+      keyBlock.innerHTML = `&#8592`;
     }
+    if (key === 'ArrowRight') {
+      keyBlock.classList.add('key-other');
+      keyBlock.innerHTML = `&#8594;`;
+    }
+
     if (key === 'ArrowUp') {
       keyBlock.classList.add('key-arrow-up', 'key-other');
-      keyBlock.innerText = `Up`;
+      keyBlock.innerHTML = `&#8593;`;
       arrowBlock.append(keyBlock);
       return;
     }
 
     if (key === 'ArrowDown') {
       keyBlock.classList.add('key-arrow-down', 'key-other');
-      keyBlock.innerText = `Down`;
+      keyBlock.innerHTML = `&#8595;`;
       arrowBlock.append(keyBlock);
       blockKeyBoard.append(arrowBlock);
       return;
@@ -345,11 +364,14 @@ const keyLowerEng = (keys) => {
 
 document.addEventListener('keydown', (event) => {
   event.preventDefault();
-  console.log(event.key);
-  console.log(event.code);
+  textarea.focus();
   const buttonOther = document.getElementById(event.code);
   const button = document.getElementById(event.key);
-  if (event.ctrlKey === true && event.altKey === true) {
+
+  if (buttonOther === null && button === null) {
+    return (textarea.value = textarea.value + event.key);
+  }
+  if (event.shiftKey === true && event.altKey === true) {
     if (localStorage.getItem('lang') === 'Eng') {
       localStorage.setItem('lang', 'Ru');
       return blockKeyBoard
@@ -375,7 +397,7 @@ document.addEventListener('keydown', (event) => {
     blockKeyBoard.querySelectorAll('.key-default').forEach((key, index) => {
       key.textContent = arrayKeyUpperRu[index];
     });
-    buttonOther.classList.add('active');
+    return buttonOther.classList.add('active');
   }
   if (
     (localStorage.getItem('lang') === 'Eng' && event.code === 'ShiftLeft') ||
@@ -384,54 +406,190 @@ document.addEventListener('keydown', (event) => {
     blockKeyBoard.querySelectorAll('.key-default').forEach((key, index) => {
       key.textContent = arrayKeyUpperEng[index];
     });
+    return buttonOther.classList.add('active');
+  } else if (event.code === 'AltLeft' || event.code === 'AltRight') {
+    return buttonOther.classList.add('active');
+  } else if (event.code === 'Space') {
     buttonOther.classList.add('active');
-  } else if (
-    event.code === 'AltLeft' ||
-    event.code === 'AltRight' ||
-    event.code === 'Space'
-  ) {
-    buttonOther.classList.add('active');
+    return (textarea.value = textarea.value + event.key);
   } else if (event.code === 'ControlLeft' || event.code === 'ControlRight') {
+    return buttonOther.classList.add('active');
+  } else if (event.code === 'Backspace') {
     buttonOther.classList.add('active');
-  } else {
-    button.classList.add('active');
-  }
-
-  document.addEventListener('keyup', (event) => {
-    if (
-      (localStorage.getItem('lang') === 'Eng' && event.code === 'ShiftLeft') ||
-      event.code === 'ShiftRight'
-    ) {
-      blockKeyBoard
+    return (textarea.value = textarea.value.slice(0, -1));
+  } else if (event.code === 'Enter') {
+    buttonOther.classList.add('active');
+    return (textarea.value = textarea.value + '\n');
+  } else if (event.code === 'Tab') {
+    buttonOther.classList.add('active');
+    return (textarea.value = textarea.value + '  ');
+  } else if (event.code === 'CapsLock') {
+    buttonOther.classList.add('active');
+    if (localStorage.getItem('lang') === 'Eng' && !capsCheak) {
+      capsCheak = true;
+      return blockKeyBoard
+        .querySelectorAll('.key-default')
+        .forEach((key, index) => (key.textContent = arrayKeyUpperEng[index]));
+    } else if (localStorage.getItem('lang') === 'Ru' && !capsCheak) {
+      capsCheak = true;
+      return blockKeyBoard
+        .querySelectorAll('.key-default')
+        .forEach((key, index) => (key.textContent = arrayKeyUpperRu[index]));
+    } else if (localStorage.getItem('lang') === 'Eng' && capsCheak) {
+      capsCheak = false;
+      buttonOther.classList.remove('active');
+      return blockKeyBoard
         .querySelectorAll('.key-default')
         .forEach((key, index) => (key.textContent = arrayKeyLowerEng[index]));
+    } else if (localStorage.getItem('lang') === 'Ru' && capsCheak) {
+      capsCheak = false;
       buttonOther.classList.remove('active');
-    }
-    if (
-      (localStorage.getItem('lang') === 'Ru' && event.code === 'ShiftLeft') ||
-      event.code === 'ShiftRight'
-    ) {
-      blockKeyBoard
+      return blockKeyBoard
         .querySelectorAll('.key-default')
         .forEach((key, index) => (key.textContent = arrayKeyLowerRu[index]));
-      buttonOther.classList.remove('active');
     }
-    if (buttonOther) {
-      buttonOther.classList.remove('active');
-    } else {
-      button.classList.remove('active');
-    }
-  });
+  }
+  button.classList.add('active');
+
+  textarea.value =
+    textarea.value + document.getElementById(event.key).innerHTML;
 });
 
-// document.addEventListener('click', (event) => {
-//   console.log(event.target);
-//   console.log(event.code);
-//   const buttonOther = document.getElementById(event.code);
-//   const button = document.getElementById(event.key);
-//   if (event.target) {
-//     event.target.classList.add('active');
-//   }
-// });
+document.addEventListener('keyup', (event) => {
+  const buttonOther = document.getElementById(event.code);
+  const button = document.getElementById(event.key);
 
-keyLowerEng(arrayKeyLowerEngArr);
+  if (event.code === 'CapsLock') {
+    return;
+  }
+  if (
+    (localStorage.getItem('lang') === 'Eng' && event.code === 'ShiftLeft') ||
+    event.code === 'ShiftRight'
+  ) {
+    blockKeyBoard
+      .querySelectorAll('.key-default')
+      .forEach((key, index) => (key.textContent = arrayKeyLowerEng[index]));
+    return buttonOther.classList.remove('active');
+  }
+  if (
+    (localStorage.getItem('lang') === 'Ru' && event.code === 'ShiftLeft') ||
+    event.code === 'ShiftRight'
+  ) {
+    blockKeyBoard
+      .querySelectorAll('.key-default')
+      .forEach((key, index) => (key.textContent = arrayKeyLowerRu[index]));
+    return buttonOther.classList.remove('active');
+  }
+  if (buttonOther) {
+    buttonOther.classList.remove('active');
+  } else if (button) {
+    button.classList.remove('active');
+  } else return;
+});
+
+document.addEventListener('mousedown', (event) => {
+  const button = event.target;
+
+  if (
+    button !== blockKeyBoard &&
+    button !== document.body &&
+    button !== textarea &&
+    button !== document.querySelector('html')
+  ) {
+    if (localStorage.getItem('lang') === 'Ru' && button.innerHTML === 'Shift') {
+      blockKeyBoard.querySelectorAll('.key-default').forEach((key, index) => {
+        key.textContent = arrayKeyUpperRu[index];
+      });
+    }
+    if (
+      localStorage.getItem('lang') === 'Eng' &&
+      button.innerHTML === 'Shift'
+    ) {
+      blockKeyBoard.querySelectorAll('.key-default').forEach((key, index) => {
+        key.textContent = arrayKeyUpperEng[index];
+      });
+    }
+    if (button.innerHTML === 'Caps') {
+      button.classList.add('active');
+      if (localStorage.getItem('lang') === 'Eng' && !capsCheak) {
+        capsCheak = true;
+        return blockKeyBoard
+          .querySelectorAll('.key-default')
+          .forEach((key, index) => (key.textContent = arrayKeyUpperEng[index]));
+      } else if (localStorage.getItem('lang') === 'Ru' && !capsCheak) {
+        capsCheak = true;
+        return blockKeyBoard
+          .querySelectorAll('.key-default')
+          .forEach((key, index) => (key.textContent = arrayKeyUpperRu[index]));
+      } else if (localStorage.getItem('lang') === 'Eng' && capsCheak) {
+        capsCheak = false;
+        button.classList.remove('active');
+        return blockKeyBoard
+          .querySelectorAll('.key-default')
+          .forEach((key, index) => (key.textContent = arrayKeyLowerEng[index]));
+      } else if (localStorage.getItem('lang') === 'Ru' && capsCheak) {
+        capsCheak = false;
+        button.classList.remove('active');
+        return blockKeyBoard
+          .querySelectorAll('.key-default')
+          .forEach((key, index) => (key.textContent = arrayKeyLowerRu[index]));
+      }
+    } else if (button.innerHTML === 'Alt') {
+      return button.classList.add('active');
+    } else if (button.innerHTML === 'Space') {
+      button.classList.add('active');
+      return (textarea.value = textarea.value + ' ');
+    } else if (button.innerHTML === 'Ctrl') {
+      return button.classList.add('active');
+    } else if (button.innerHTML === 'Backspace') {
+      button.classList.add('active');
+      return (textarea.value = textarea.value.slice(0, -1));
+    } else if (button.innerHTML === 'Enter') {
+      button.classList.add('active');
+      return (textarea.value = textarea.value + '\n');
+    } else if (button.innerHTML === 'Tab') {
+      button.classList.add('active');
+      return (textarea.value = textarea.value + '  ');
+    }
+    if (button.innerHTML !== 'Shift') {
+      textarea.value = textarea.value + button.innerHTML;
+      button.classList.add('active');
+    }
+  }
+});
+
+document.addEventListener('mouseup', (event) => {
+  const button = event.target;
+  if (localStorage.getItem('lang') === 'Eng' && button.innerHTML === 'Shift') {
+    blockKeyBoard
+      .querySelectorAll('.key-default')
+      .forEach((key, index) => (key.textContent = arrayKeyLowerEng[index]));
+    return event.target.classList.remove('active');
+  }
+  if (localStorage.getItem('lang') === 'Ru' && button.innerHTML === 'Shift') {
+    blockKeyBoard
+      .querySelectorAll('.key-default')
+      .forEach((key, index) => (key.textContent = arrayKeyLowerRu[index]));
+    return event.target.classList.remove('active');
+  }
+  if (event.target) {
+    event.target.classList.remove('active');
+  }
+});
+
+function loadingKeyBoard() {
+  keyLowerEng(arrayKeyLowerEngArr);
+  if (localStorage.getItem('lang') === 'Ru') {
+    blockKeyBoard.querySelectorAll('.key-default').forEach((key, index) => {
+      key.textContent = arrayKeyLowerRu[index];
+    });
+    return;
+  } else {
+    blockKeyBoard.querySelectorAll('.key-default').forEach((key, index) => {
+      key.textContent = arrayKeyLowerEng[index];
+    });
+    return;
+  }
+}
+
+loadingKeyBoard();

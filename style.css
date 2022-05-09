@@ -4,13 +4,21 @@
 
 body {
   padding: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
-.textarea {
+.text {
+  resize: none;
+  border: 1px solid greenyellow;
+  margin: 20px;
   color: aliceblue;
+  font-size: 24px;
 }
 
 .position {
-  width: 75vw;
+  width: 810px;
   display: flex;
   flex-wrap: wrap;
   border: 2px solid greenyellow;
@@ -20,54 +28,59 @@ body {
 }
 
 .active {
-  background-color: green;
+  transform: scale(0.9);
+  background: greenyellow;
 }
 
 .key-default {
+  cursor: pointer;
   color: white;
   font-size: 20px;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   border: 2px solid greenyellow;
   border-radius: 4px;
   margin: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: 0.2s ease-in-out;
   animation: mymove 5s infinite;
 }
 
 .key-other {
+  cursor: pointer;
   color: white;
   font-size: 20px;
-  width: 60px;
-  height: 60px;
-  border: 2px solid greenyellow;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgb(86, 130, 21);
   border-radius: 4px;
   margin: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: 0.1s ease-in-out;
   animation: mymove 5s infinite;
 }
 
 .key-backspace {
-  width: 140px;
-}
-.key-tab {
   width: 90px;
 }
+.key-tab {
+  width: 60px;
+}
 .key-capslock {
-  width: 110px;
+  width: 70px;
 }
 .key-enter {
-  width: 165px;
+  width: 115px;
 }
 .key-shift-left {
-  width: 150px;
+  width: 90px;
 }
 .key-shift-right {
-  width: 200px;
+  width: 150px;
 }
 .key-meta {
   background-size: contain;
@@ -76,14 +89,16 @@ body {
 }
 
 .key-arrow-up {
-  height: 25px;
+  margin: 0;
+  height: 20px;
 }
 .key-arrow-down {
-  height: 25px;
+  margin: 0;
+  height: 20px;
 }
 
 .key-space {
-  width: 510px;
+  width: 360px;
 }
 
 @keyframes mymove {
