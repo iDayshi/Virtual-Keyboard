@@ -1,0 +1,108 @@
+* {
+  background-color: black;
+}
+
+body {
+  padding: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.text {
+  resize: none;
+  border: 1px solid greenyellow;
+  margin: 20px;
+  color: aliceblue;
+  font-size: 24px;
+}
+
+.position {
+  width: 810px;
+  display: flex;
+  flex-wrap: wrap;
+  border: 2px solid greenyellow;
+  border-radius: 5px;
+  margin: auto;
+  padding: 5px;
+}
+
+.active {
+  transform: scale(0.9);
+  background: greenyellow;
+}
+
+.key-default {
+  cursor: pointer;
+  color: white;
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  border: 2px solid greenyellow;
+  border-radius: 4px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease-in-out;
+  animation: mymove 5s infinite;
+}
+
+.key-other {
+  cursor: pointer;
+  color: white;
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgb(86, 130, 21);
+  border-radius: 4px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.1s ease-in-out;
+  animation: mymove 5s infinite;
+}
+
+.key-backspace {
+  width: 90px;
+}
+.key-tab {
+  width: 60px;
+}
+.key-capslock {
+  width: 70px;
+}
+.key-enter {
+  width: 115px;
+}
+.key-shift-left {
+  width: 90px;
+}
+.key-shift-right {
+  width: 150px;
+}
+.key-meta {
+  background-size: contain;
+  background-image: url(/assets/window.png);
+  background-color: greenyellow;
+}
+
+.key-arrow-up {
+  margin: 0;
+  height: 20px;
+}
+.key-arrow-down {
+  margin: 0;
+  height: 20px;
+}
+
+.key-space {
+  width: 360px;
+}
+
+@keyframes mymove {
+  50% {
+    box-shadow: 2px 2px 2px 2px greenyellow;
+  }
+}
